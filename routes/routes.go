@@ -22,5 +22,11 @@ func HandleRequest() {
 	r.HandleFunc("/api/receitas/{id}", controller.IncomeDetail).Methods("Get")
 	r.HandleFunc("/api/receitas/{id}", controller.EditIncome).Methods("Put")
 	r.HandleFunc("/api/receitas/{id}", controller.DeleteIncome).Methods("Delete")
+	r.HandleFunc("/api/despesas", controller.NewOutcome).Methods("Post")
+	r.HandleFunc("/api/despesas", controller.Outcome).Methods("Get")
+	r.HandleFunc("/api/despesas/", controller.Outcome).Methods("Get")
+	r.HandleFunc("/api/despesas/{id}", controller.OutcomeDetail).Methods("Get")
+	r.HandleFunc("/api/despesas/{id}", controller.EditOutcome).Methods("Put")
+	r.HandleFunc("/api/despesas/{id}", controller.DeleteOutcome).Methods("Delete")
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(r)))
 }

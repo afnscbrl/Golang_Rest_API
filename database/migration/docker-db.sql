@@ -16,7 +16,9 @@ create table incomes (
 
 create table outcomes (
     id serial primary key,
-    describe varchar,
-    value real,
-    date varchar
+    describe varchar NOT NULL check (describe != ''),
+    value real NOT NULL check (value > 0),
+    date varchar NOT NULL check (date != ''),
+    month integer NOT NULL default (extract(MONTH FROM CURRENT_DATE)),
+    constraint duplicate_outcome unique (describe, month)
 );

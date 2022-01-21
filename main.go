@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	//The main only execute the connection with db and get routes
 	database.ConnectWithDB()
 	fmt.Println("Starting the server...")
 	routes.HandleRequest()

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width initial-scale=1">
+    <meta name="description"
+        content="Personal finance management">
+    <meta name="keywords"
+        content="finance, control, management, outcomes, incomes, saves">
+    <meta name="autor" content="Afonso Cabral">
+    <title>Go Personal Finance</title>
+    <!-- <link rel="icon" type="image/png" href="css/img/chart.png"> -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <!-- <img class="logo" src="css/img/chart.svg" alt="logo do site" /> -->
+        <div class="headerText">
+            <h1>Go Personal Finance</h1>
+        </div>
+    </header>
+    <main>
+        <div class="formulario">
+            <form class="flex flex--coluna" data-form>
+                <div class="input-container">
+                    <label class="input-label" for="nome">Description</label>
+                    <input name="description" id="description" class="input" type="text" placeholder="income description" required data-description>
+                </div>
+
+                <div class="input-container">
+                    <label class="input-label" for="value">Value</label>
+                    <input name="value" id="value" class="input" type="number" placeholder="$00.00" required data-email>
+                </div>
+
+                <div class="input-container">
+                    <label class="input-label" for="date" >Date</label>
+                    <input name="date" id="date" class="input" type="date" placeholder="YYYY-MM-DD" required data-email>
+                </div>
+
+                <button type="submit"class="botao">
+                Cadastrar
+            </button>
+            </form>
+        </div>
+        <div class="conteudo">
+        </div>
+    </main>
+</body>

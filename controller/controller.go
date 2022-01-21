@@ -10,6 +10,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+//This controller contains all func that control the in/out data from requests and db
+
 func Home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Home Page")
 }

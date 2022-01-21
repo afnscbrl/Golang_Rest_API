@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+//This function contains all URL routes of API and the html methods.
 func HandleRequest() {
 	r := mux.NewRouter()
 	r.Use(middleware.ContentTypeMiddleware)
@@ -28,5 +29,6 @@ func HandleRequest() {
 	r.HandleFunc("/api/despesas/{id}", controller.OutcomeDetail).Methods("Get")
 	r.HandleFunc("/api/despesas/{id}", controller.EditOutcome).Methods("Put")
 	r.HandleFunc("/api/despesas/{id}", controller.DeleteOutcome).Methods("Delete")
+	//set port 8000 to list and serve
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(r)))
 }

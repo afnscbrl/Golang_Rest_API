@@ -1,3 +1,4 @@
+{{define "Income"}}
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -23,7 +24,7 @@
     </header>
     <main>
         <div class="formulario">
-            <form class="flex flex--coluna" data-form>
+            <form class="flex flex--coluna" method="POST" data-form>
                 <div class="input-container">
                     <label class="input-label" for="nome">Description</label>
                     <input name="description" id="description" class="input" type="text" placeholder="income description" required data-description>
@@ -39,7 +40,7 @@
                     <input name="date" id="date" class="input" type="date" placeholder="YYYY-MM-DD" required data-email>
                 </div>
 
-                <button type="submit"class="botao">
+                <button type="submit" class="botao">
                 Cadastrar
             </button>
             </form>
@@ -48,3 +49,5 @@
         </div>
     </main>
 </body>
+</html>
+{{end}}

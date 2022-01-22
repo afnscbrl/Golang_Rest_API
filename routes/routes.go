@@ -14,6 +14,7 @@ import (
 //This function contains all URL routes of API and the html methods.
 func HandleRequest() {
 	r := mux.NewRouter()
+	//Quando implementar o front, editar o Middleware
 	r.Use(middleware.ContentTypeMiddleware)
 	r.HandleFunc("/", controller.Home)
 	r.HandleFunc("/api/dashboard", controller.Dashboard).Methods("Get")

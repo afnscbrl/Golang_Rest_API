@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/afnscbrl/Golang_Rest_API/database"
-	"github.com/afnscbrl/Golang_Rest_API/routes/models"
+	"github.com/afnscbrl/Golang_Rest_API/models"
 	"github.com/gorilla/mux"
 )
 
@@ -27,6 +27,19 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewIncome(w http.ResponseWriter, r *http.Request) {
+	// r.ParseForm()
+	// var err error
+	// var newIncome models.Income
+	// // get the value in html tag description
+	// newIncome.Describe = r.PostForm.Get("description")
+	// newIncome.Value, err = strconv.ParseFloat(r.PostForm.Get("value"), 64)
+	// if err != nil {
+	// 	fmt.Println("Error ParseFloat")
+	// }
+	// newIncome.Date = r.PostForm.Get("date")
+	// database.DB.Create(&newIncome)
+	// json.NewEncoder(w).Encode(newIncome)
+
 	var newIncome models.Income
 	json.NewDecoder(r.Body).Decode(&newIncome)
 	database.DB.Create(&newIncome)
@@ -34,9 +47,15 @@ func NewIncome(w http.ResponseWriter, r *http.Request) {
 }
 
 func Income(w http.ResponseWriter, r *http.Request) {
+	// var inc []models.Income
+	// var tmpl = template.Must(template.ParseGlob("./view/income.html"))
+	// tmpl.ExecuteTemplate(w, "Income", inc)
+
 	var inc []models.Income
 	database.DB.Find(&inc)
 	json.NewEncoder(w).Encode(inc)
+
+	//for pra listar todos os []inc e jogar no tamplate
 }
 
 func IncomeDetail(w http.ResponseWriter, r *http.Request) {

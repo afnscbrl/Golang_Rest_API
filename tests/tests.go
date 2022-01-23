@@ -135,7 +135,13 @@ func main() {
 	switch {
 	case method == "Get":
 		{
-			testGet("http://localhost:8000/api/" + endp)
+			if os.Args[3] == "0" {
+				testGet("http://localhost:8000/api/" + endp)
+			} else {
+				id := os.Args[3]
+				testGet("http://localhost:8000/api/" + endp + "/" + id)
+			}
+
 		}
 	case method == "Post":
 		{
@@ -143,7 +149,8 @@ func main() {
 		}
 	case method == "Delete":
 		{
-			testDelete("http://localhost:8000/api/" + endp)
+			id := os.Args[3]
+			testDelete("http://localhost:8000/api/" + endp + "/" + id)
 		}
 	case method == "Put":
 		{

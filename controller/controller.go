@@ -87,6 +87,9 @@ func DeleteIncome(w http.ResponseWriter, r *http.Request) {
 func NewOutcome(w http.ResponseWriter, r *http.Request) {
 	var newOutcome models.Outcome
 	json.NewDecoder(r.Body).Decode(&newOutcome)
+	if newOutcome.Category == "" {
+		newOutcome.Category = "Outras"
+	}
 	database.DB.Create(&newOutcome)
 	json.NewEncoder(w).Encode(newOutcome)
 }
@@ -97,7 +100,7 @@ func Outcome(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(out)
 }
 
-func OutcomeDetail(w http.ResponseWriter, r *http.Request) {
+func OutcomeDetailId(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var outcome models.Outcome
@@ -105,6 +108,15 @@ func OutcomeDetail(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(outcome)
 
 }
+
+// func OutcomeDetailDescribe(w http.ResponseWriter, r *http.Request) {
+// 	vars := mux.Vars(r)
+// 	desc := vars["describe"]
+// 	var outcome models.Outcome
+// 	database.DB.First(&outcome, "describe = ?", desc)
+// 	json.NewEncoder(w).Encode(outcome)
+
+// }
 
 func EditOutcome(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

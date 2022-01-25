@@ -23,6 +23,7 @@ type Outcome struct {
 	Describe string  `json:"describe"`
 	Value    float64 `json:"value"`
 	Date     string  `json:"date"`
+	Category string  `json:"category"`
 }
 
 var Outcomes []Income

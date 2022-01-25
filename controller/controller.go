@@ -51,9 +51,18 @@ func Income(w http.ResponseWriter, r *http.Request) {
 	// var tmpl = template.Must(template.ParseGlob("./view/income.html"))
 	// tmpl.ExecuteTemplate(w, "Income", inc)
 
-	var inc []models.Income
-	database.DB.Find(&inc)
-	json.NewEncoder(w).Encode(inc)
+	v := r.URL.Query()
+
+	if !v.Has("describe") {
+		var inc []models.Income
+		database.DB.Find(&inc)
+		json.NewEncoder(w).Encode(inc)
+	} else {
+		desc := v.Get("describe")
+		var income models.Income
+		database.DB.Where("describe = ?", desc).First(&income)
+		json.NewEncoder(w).Encode(income)
+	}
 
 	//for pra listar todos os []inc e jogar no tamplate
 }
@@ -95,12 +104,22 @@ func NewOutcome(w http.ResponseWriter, r *http.Request) {
 }
 
 func Outcome(w http.ResponseWriter, r *http.Request) {
-	var out []models.Outcome
-	database.DB.Find(&out)
-	json.NewEncoder(w).Encode(out)
+
+	v := r.URL.Query()
+	if !v.Has("describe") {
+		var out []models.Outcome
+		database.DB.Find(&out)
+		json.NewEncoder(w).Encode(out)
+
+	} else {
+		desc := v.Get("describe")
+		var outcome models.Outcome
+		database.DB.Where("describe = ?", desc).First(&outcome)
+		json.NewEncoder(w).Encode(outcome)
+	}
 }
 
-func OutcomeDetailId(w http.ResponseWriter, r *http.Request) {
+func OutcomeDetail(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var outcome models.Outcome
@@ -108,15 +127,6 @@ func OutcomeDetailId(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(outcome)
 
 }
-
-// func OutcomeDetailDescribe(w http.ResponseWriter, r *http.Request) {
-// 	vars := mux.Vars(r)
-// 	desc := vars["describe"]
-// 	var outcome models.Outcome
-// 	database.DB.First(&outcome, "describe = ?", desc)
-// 	json.NewEncoder(w).Encode(outcome)
-
-// }
 
 func EditOutcome(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

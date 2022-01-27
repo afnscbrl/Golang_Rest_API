@@ -14,6 +14,9 @@ type Income struct {
 	Describe string  `json:"describe"`
 	Value    float64 `json:"value"`
 	Date     string  `json:"date"`
+	Year     int     `json:"-"`
+	Month    int     `json:"-"`
+	Day      int     `json:"-"`
 }
 
 var Incomes []Income
@@ -24,6 +27,16 @@ type Outcome struct {
 	Value    float64 `json:"value"`
 	Date     string  `json:"date"`
 	Category string  `json:"category"`
+	Year     int     `json:"-"`
+	Month    int     `json:"-"`
+	Day      int     `json:"-"`
 }
 
 var Outcomes []Income
+
+type Category struct {
+	Id       int    `json:"id"`
+	Category string `json:"category"`
+}
+
+var Categorys []Category

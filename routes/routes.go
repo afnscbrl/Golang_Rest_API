@@ -16,18 +16,21 @@ func HandleRequest() {
 	r := mux.NewRouter()
 	//Quando implementar o front, editar o Middleware
 	r.Use(middleware.ContentTypeMiddleware)
-	r.HandleFunc("/", controller.Home)
-	r.HandleFunc("/api/dashboard", controller.Dashboard).Methods("Get")
+
+	// r.HandleFunc("/", controller.Home)
+	// r.HandleFunc("/api/dashboard", controller.Dashboard).Methods("Get")
 	r.HandleFunc("/api/receitas", controller.NewIncome).Methods("Post")
 	r.HandleFunc("/api/receitas", controller.Income).Methods("Get")
 	r.HandleFunc("/api/receitas/{id}", controller.IncomeDetail).Methods("Get")
 	r.HandleFunc("/api/receitas/{id}", controller.EditIncome).Methods("Put")
 	r.HandleFunc("/api/receitas/{id}", controller.DeleteIncome).Methods("Delete")
+	r.HandleFunc("/api/receitas/{year}/{month}", controller.IncomeByMonth).Methods("Get")
 	r.HandleFunc("/api/despesas", controller.NewOutcome).Methods("Post")
 	r.HandleFunc("/api/despesas", controller.Outcome).Methods("Get")
 	r.HandleFunc("/api/despesas/{id}", controller.OutcomeDetail).Methods("Get")
 	r.HandleFunc("/api/despesas/{id}", controller.EditOutcome).Methods("Put")
 	r.HandleFunc("/api/despesas/{id}", controller.DeleteOutcome).Methods("Delete")
+	r.HandleFunc("/api/despesas/{year}/{month}", controller.OutcomeByMonth).Methods("Get")
 	//set port 8000 to list and serve
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(r)))
 }

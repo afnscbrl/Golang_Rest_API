@@ -13,6 +13,7 @@ var (
 	err error
 )
 
+//edit to export env var
 func ConnectWithDB() {
 	connectionString := "host=localhost user=root password=root dbname=root port=5432 sslmode=disable"
 	DB, err = gorm.Open(postgres.Open(connectionString))

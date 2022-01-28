@@ -19,6 +19,7 @@ func HandleRequest() {
 
 	// r.HandleFunc("/", controller.Home)
 	// r.HandleFunc("/api/dashboard", controller.Dashboard).Methods("Get")
+	r.HandleFunc("/api/resumo/{year}/{month}", controller.BalanceByMonth).Methods("Get")
 	r.HandleFunc("/api/receitas", controller.NewIncome).Methods("Post")
 	r.HandleFunc("/api/receitas", controller.Income).Methods("Get")
 	r.HandleFunc("/api/receitas/{id}", controller.IncomeDetail).Methods("Get")

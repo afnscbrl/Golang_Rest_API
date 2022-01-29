@@ -17,6 +17,7 @@ func BalanceByMonth(w http.ResponseWriter, r *http.Request) {
 		income        []models.Income
 	)
 
+	bycategory := make(map[string]float64)
 	vars := mux.Vars(r)
 	year := vars["year"]
 	month := vars["month"]
@@ -30,14 +31,15 @@ func BalanceByMonth(w http.ResponseWriter, r *http.Request) {
 
 	for j := 0; j < len(outcome); j++ {
 		total_outcome += outcome[j].Value
+		bycategory[outcome[j].Category] += outcome[j].Value
 	}
 
 	res := models.Resume{
 		TotalIncome:  total_income,
 		TotalOutcome: total_outcome,
 		Balance:      (total_income - total_outcome),
-		//add by category
 	}
 
 	json.NewEncoder(w).Encode(res)
+	json.NewEncoder(w).Encode(bycategory)
 }

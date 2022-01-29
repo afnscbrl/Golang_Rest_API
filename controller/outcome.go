@@ -30,7 +30,16 @@ import (
 
 func NewOutcome(w http.ResponseWriter, r *http.Request) {
 	var newOutcome models.Outcome
+	var outcome []models.Outcome
+
 	json.NewDecoder(r.Body).Decode(&newOutcome)
+
+	if newOutcome.Id != 0 {
+		log.Println("Error 400: Bad Request - Id don't be set")
+		w.WriteHeader(400)
+		return
+	}
+
 	if newOutcome.Category == "" {
 		newOutcome.Category = "Outras"
 	}
@@ -46,6 +55,15 @@ func NewOutcome(w http.ResponseWriter, r *http.Request) {
 	newOutcome.Year = year
 	newOutcome.Month = month
 	newOutcome.Day = day
+
+	database.DB.Where("month = ?", month).Find(&outcome)
+	for i := 0; i < len(outcome); i++ {
+		if outcome[i].Describe == newOutcome.Describe {
+			log.Println("Error 409: Conflict - This desccribe already exist in this month")
+			w.WriteHeader(409)
+			return
+		}
+	}
 	database.DB.Create(&newOutcome)
 	json.NewEncoder(w).Encode(newOutcome)
 }
@@ -79,6 +97,7 @@ func EditOutcome(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var outcome models.Outcome
+	var outcomeDB []models.Outcome
 	database.DB.First(&outcome, id)
 	json.NewDecoder(r.Body).Decode(&outcome)
 	dates := strings.Split(outcome.Date, "-")
@@ -93,6 +112,15 @@ func EditOutcome(w http.ResponseWriter, r *http.Request) {
 	outcome.Year = year
 	outcome.Month = month
 	outcome.Day = day
+
+	database.DB.Where("month = ?", month).Find(&outcomeDB)
+	for i := 0; i < len(outcomeDB); i++ {
+		if outcomeDB[i].Describe == outcome.Describe {
+			log.Println("Error 409: Conflict - This desccribe already exist in this month")
+			w.WriteHeader(409)
+			return
+		}
+	}
 	database.DB.Save(&outcome)
 	json.NewEncoder(w).Encode(outcome)
 }

@@ -27,7 +27,15 @@ func NewIncome(w http.ResponseWriter, r *http.Request) {
 	// json.NewEncoder(w).Encode(newIncome)
 
 	var newIncome models.Income
+	var income []models.Income
 	json.NewDecoder(r.Body).Decode(&newIncome)
+
+	if newIncome.Id != 0 {
+		log.Println("Error 400: Bad Request - Id don't be set")
+		w.WriteHeader(400)
+		return
+	}
+
 	dates := strings.Split(newIncome.Date, "-")
 	day, _ := strconv.Atoi(dates[2])
 	month, _ := strconv.Atoi(dates[1])
@@ -40,6 +48,15 @@ func NewIncome(w http.ResponseWriter, r *http.Request) {
 	newIncome.Year = year
 	newIncome.Month = month
 	newIncome.Day = day
+
+	database.DB.Where("month = ?", month).Find(&income)
+	for i := 0; i < len(income); i++ {
+		if income[i].Describe == newIncome.Describe {
+			log.Println("Error 409: Conflict - This desccribe already exist in this month")
+			w.WriteHeader(409)
+			return
+		}
+	}
 	database.DB.Create(&newIncome)
 	json.NewEncoder(w).Encode(newIncome)
 }
@@ -77,6 +94,7 @@ func EditIncome(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var income models.Income
+	var incomeDB []models.Income
 	database.DB.First(&income, id)
 	json.NewDecoder(r.Body).Decode(&income)
 	dates := strings.Split(income.Date, "-")
@@ -91,6 +109,16 @@ func EditIncome(w http.ResponseWriter, r *http.Request) {
 	income.Year = year
 	income.Month = month
 	income.Day = day
+
+	database.DB.Where("month = ?", month).Find(&incomeDB)
+	for i := 0; i < len(incomeDB); i++ {
+		if incomeDB[i].Describe == income.Describe {
+			log.Println("Error 409: Conflict - This desccribe already exist in this month")
+			w.WriteHeader(409)
+			return
+		}
+	}
+
 	database.DB.Save(&income)
 	json.NewEncoder(w).Encode(income)
 }

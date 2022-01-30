@@ -36,7 +36,7 @@ func NewOutcome(w http.ResponseWriter, r *http.Request) {
 
 	if newOutcome.Id != 0 {
 		log.Println("Error 400: Bad Request - Id don't be set")
-		w.WriteHeader(400)
+		http.Error(w, badResquest+" - Id don't be set", http.StatusBadRequest)
 		return
 	}
 
@@ -49,7 +49,7 @@ func NewOutcome(w http.ResponseWriter, r *http.Request) {
 	year, _ := strconv.Atoi(dates[0])
 	if (day < 1 || day > 31) || (month < 1 || month > 12) {
 		log.Println("Error 400: BAD RESQUEST - Wrong data type")
-		w.WriteHeader(400)
+		http.Error(w, badResquest+" - Wrong data type", http.StatusBadRequest)
 		return
 	}
 	newOutcome.Year = year
@@ -60,7 +60,7 @@ func NewOutcome(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(outcome); i++ {
 		if outcome[i].Describe == newOutcome.Describe {
 			log.Println("Error 409: Conflict - This desccribe already exist in this month")
-			w.WriteHeader(409)
+			http.Error(w, conflict+" - This desccribe already exist for this month", http.StatusConflict)
 			return
 		}
 	}
@@ -106,7 +106,7 @@ func EditOutcome(w http.ResponseWriter, r *http.Request) {
 	year, _ := strconv.Atoi(dates[0])
 	if (day < 1 || day > 31) || (month < 1 || month > 12) {
 		log.Println("Error 400: BAD RESQUEST - Wrong data type")
-		w.WriteHeader(400)
+		http.Error(w, badResquest+" - Wrong data type", http.StatusBadRequest)
 		return
 	}
 	outcome.Year = year
@@ -117,7 +117,7 @@ func EditOutcome(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(outcomeDB); i++ {
 		if outcomeDB[i].Describe == outcome.Describe {
 			log.Println("Error 409: Conflict - This desccribe already exist in this month")
-			w.WriteHeader(409)
+			http.Error(w, conflict+" - This desccribe already exist for this month", http.StatusConflict)
 			return
 		}
 	}

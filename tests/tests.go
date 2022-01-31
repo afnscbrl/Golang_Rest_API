@@ -10,7 +10,8 @@ import (
 
 func main() {
 
-	ExcuteTestsIncome()
+	ExecuteTestsIncome()
+	ExecuteTestsOutcome()
 
 }
 
@@ -142,7 +143,7 @@ func TestPut(endpoint string, jf jsonFile, id int) string {
 
 }
 
-func ExcuteTestsIncome() {
+func ExecuteTestsIncome() {
 	tests_ok := 0
 	tests_fail := 0
 	var response string
@@ -152,6 +153,8 @@ func ExcuteTestsIncome() {
 	fmt.Println("-------- Income Tests --------")
 	fmt.Println("")
 	//	case method == "Get":
+
+	//Test func Income()
 	response = TestGet("http://localhost:8000/api/receitas")
 	if response != "200 OK" {
 		tests_fail += 1
@@ -160,6 +163,8 @@ func ExcuteTestsIncome() {
 		tests_ok += 1
 		log.Println("Test GET all ok...")
 	}
+
+	//Test func IncomeDetail()
 	response = TestGet("http://localhost:8000/api/receitas/2")
 	if response != "200 OK" {
 		tests_fail += 1
@@ -177,6 +182,24 @@ func ExcuteTestsIncome() {
 		log.Println("Test GET by id 'NOT FOUND' ok...")
 	}
 
+	//Test func IncomeByMonth()
+	response = TestGet("http://localhost:8000/api/receitas/2022/10")
+	if response != "200 OK" {
+		tests_fail += 1
+		log.Println("Test GET by year/month fail, expected 200 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test GET by year/month faill ok...")
+	}
+	response = TestGet("http://localhost:8000/api/receitas/2022/2")
+	if response != "404 Not Found" {
+		tests_fail += 1
+		log.Println("Test GET by by year/month fail, expected 404 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test GET by year/month fail 'NOT FOUND' ok...")
+	}
+
 	//	case method == "Post":
 	values = jsonFile{
 		Id:       2,
@@ -184,6 +207,8 @@ func ExcuteTestsIncome() {
 		Value:    15,
 		Date:     "2002-01-01",
 	}
+
+	//Test func NewIncome
 	response = TestPost("http://localhost:8000/api/receitas", values)
 	if response != "400 Bad Request" {
 		tests_fail += 1
@@ -222,6 +247,7 @@ func ExcuteTestsIncome() {
 	}
 
 	//	case method == "Delete":
+	//Test func DeleteIncome()
 	response = TestDelete("http://localhost:8000/api/receitas/1")
 	if response != "404 Not Found" {
 		tests_fail += 1
@@ -237,7 +263,9 @@ func ExcuteTestsIncome() {
 		Value:    15000,
 		Date:     "2022-10-29",
 	}
-	response = TestPut("http://localhost:8000/api/receitas/1", values, 1)
+
+	//Test func EditIncome()
+	response = TestPut("http://localhost:8000/api/receitas/16", values, 1)
 	if response != "404 Not Found" {
 		tests_fail += 1
 		log.Println("Test EDIT fail, expected 404 get", response)
@@ -246,6 +274,141 @@ func ExcuteTestsIncome() {
 		log.Println("Test EDIT 'NOT FOUND' ok...")
 	}
 
-	fmt.Printf("Total tests fails: %d", tests_fail)
+	fmt.Println("Total tests fails: ", tests_fail)
+	fmt.Println("Total tests ok: ", tests_ok)
+}
+
+func ExecuteTestsOutcome() {
+	tests_ok := 0
+	tests_fail := 0
+	var response string
+	var values jsonFile
+
+	//---- TEST OUTCOME -----
+	fmt.Println("-------- Outcome Tests --------")
+	fmt.Println("")
+	//	case method == "Get":
+
+	//Test func Income()
+	response = TestGet("http://localhost:8000/api/despesas")
+	if response != "200 OK" {
+		tests_fail += 1
+		log.Println("Test GET all fail, expected 200 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test GET all ok...")
+	}
+
+	//Test func IncomeDetail()
+	response = TestGet("http://localhost:8000/api/despesas/2")
+	if response != "200 OK" {
+		tests_fail += 1
+		log.Println("Test GET by id fail, expected 200 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test GET by id ok...")
+	}
+	response = TestGet("http://localhost:8000/api/despesas/0")
+	if response != "404 Not Found" {
+		tests_fail += 1
+		log.Println("Test GET by id fail, expected 404 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test GET by id 'NOT FOUND' ok...")
+	}
+
+	//Test func IncomeByMonth()
+	response = TestGet("http://localhost:8000/api/despesas/2022/10")
+	if response != "200 OK" {
+		tests_fail += 1
+		log.Println("Test GET all fail, expected 200 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test GET all ok...")
+	}
+	response = TestGet("http://localhost:8000/api/despesas/2022/2")
+	if response != "404 Not Found" {
+		tests_fail += 1
+		log.Println("Test GET by id fail, expected 404 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test GET by id 'NOT FOUND' ok...")
+	}
+
+	//	case method == "Post":
+	values = jsonFile{
+		Id:       2,
+		Describe: "teste01",
+		Value:    15,
+		Date:     "2002-01-01",
+	}
+
+	//Test func NewIncome
+	response = TestPost("http://localhost:8000/api/despesas", values)
+	if response != "400 Bad Request" {
+		tests_fail += 1
+		log.Println("Test POST with ID fail, expected 400 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test POST with ID 'Bad Request' ok...")
+	}
+
+	values = jsonFile{
+		Describe: "teste01",
+		Value:    15,
+		Date:     "2002-15-32",
+	}
+	response = TestPost("http://localhost:8000/api/despesas", values)
+	if response != "400 Bad Request" {
+		tests_fail += 1
+		log.Println("Test POST with wrong date fail, expected 400 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test POST with wrong date 'Bad Request' ok...")
+	}
+
+	values = jsonFile{
+		Describe: "TRE",
+		Value:    15000,
+		Date:     "2022-10-29",
+	}
+	response = TestPost("http://localhost:8000/api/despesas", values)
+	if response != "409 Conflict" {
+		tests_fail += 1
+		log.Println("Test POST with same describe in month, expected 409 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test POST with same describe in month 'Conflict' ok...")
+	}
+
+	//	case method == "Delete":
+	//Test func DeleteIncome()
+	response = TestDelete("http://localhost:8000/api/despesas/1")
+	if response != "404 Not Found" {
+		tests_fail += 1
+		log.Println("Test DELETE fail, expected 404 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test DELETE 'NOT FOUND' ok...")
+	}
+
+	//	case method == "Put":
+	values = jsonFile{
+		Describe: "TRE",
+		Value:    15000,
+		Date:     "2022-10-29",
+	}
+
+	//Test func EditIncome()
+	response = TestPut("http://localhost:8000/api/despesas/1", values, 1)
+	if response != "404 Not Found" {
+		tests_fail += 1
+		log.Println("Test EDIT fail, expected 404 get", response)
+	} else {
+		tests_ok += 1
+		log.Println("Test EDIT 'NOT FOUND' ok...")
+	}
+
+	fmt.Println("Total tests fails: ", tests_fail)
 	fmt.Println("Total tests ok: ", tests_ok)
 }

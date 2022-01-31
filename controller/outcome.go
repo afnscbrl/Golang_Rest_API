@@ -89,6 +89,10 @@ func OutcomeDetail(w http.ResponseWriter, r *http.Request) {
 	id := vars["id"]
 	var outcome models.Outcome
 	database.DB.First(&outcome, id)
+	if outcome.Id == 0 {
+		http.Error(w, "Record not found ", http.StatusNotFound)
+		return
+	}
 	json.NewEncoder(w).Encode(outcome)
 
 }
@@ -99,6 +103,10 @@ func EditOutcome(w http.ResponseWriter, r *http.Request) {
 	var outcome models.Outcome
 	var outcomeDB []models.Outcome
 	database.DB.First(&outcome, id)
+	if outcome.Id == 0 {
+		http.Error(w, "Record not found ", http.StatusNotFound)
+		return
+	}
 	json.NewDecoder(r.Body).Decode(&outcome)
 	dates := strings.Split(outcome.Date, "-")
 	day, _ := strconv.Atoi(dates[2])
@@ -129,6 +137,10 @@ func DeleteOutcome(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var outcome models.Outcome
+	if outcome.Id == 0 {
+		http.Error(w, "Record not found ", http.StatusNotFound)
+		return
+	}
 	database.DB.Delete(&outcome, id)
 	json.NewEncoder(w).Encode(outcome)
 }
@@ -137,8 +149,18 @@ func OutcomeByMonth(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	year := vars["year"]
 	month := vars["month"]
-
+	int_month, _ := strconv.Atoi(month)
+	if int_month <= 0 || int_month > 12 {
+		log.Println("Error 400: BAD RESQUEST - Wrong data type")
+		http.Error(w, badResquest+" - Wrong data type", http.StatusBadRequest)
+		return
+	}
 	var outcome []models.Outcome
 	database.DB.Where("year = ? AND month = ?", year, month).Find(&outcome)
+	if len(outcome) == 0 {
+		log.Println("Error 404: NOT FOUND")
+		http.Error(w, "Data not found", http.StatusNotFound)
+		return
+	}
 	json.NewEncoder(w).Encode(outcome)
 }

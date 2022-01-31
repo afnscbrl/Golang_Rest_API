@@ -95,6 +95,7 @@ func IncomeDetail(w http.ResponseWriter, r *http.Request) {
 	database.DB.First(&income, id)
 	if income.Id == 0 {
 		http.Error(w, "Record not found ", http.StatusNotFound)
+		return
 	}
 	json.NewEncoder(w).Encode(income)
 }
@@ -110,7 +111,6 @@ func EditIncome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&income)
-	// Tratar data na requisiçao
 	dates := strings.Split(income.Date, "-")
 	day, _ := strconv.Atoi(dates[2])
 	month, _ := strconv.Atoi(dates[1])
@@ -153,8 +153,19 @@ func IncomeByMonth(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	year := vars["year"]
 	month := vars["month"]
-
+	int_month, _ := strconv.Atoi(month)
+	if int_month <= 0 || int_month > 12 {
+		log.Println("Error 400: BAD RESQUEST - Wrong data type")
+		http.Error(w, badResquest+" - Wrong data type", http.StatusBadRequest)
+		return
+	}
 	var income []models.Income
 	database.DB.Where("year = ? AND month = ?", year, month).Find(&income)
+	if len(income) == 0 {
+		log.Println("Error 404: NOT FOUND")
+		http.Error(w, "Data not found", http.StatusNotFound)
+		return
+	}
 	json.NewEncoder(w).Encode(income)
+
 }

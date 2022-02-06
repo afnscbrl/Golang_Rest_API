@@ -39,3 +39,12 @@ type Category struct {
 }
 
 var Categorys []Category
+
+type Users struct {
+	Id           int    `json:"-"`
+	Username     string `json:"username"`
+	Passwordhash string `json:"password"`
+	Isdisable    bool   `json:"-"`
+}
+
+var Userss []Users

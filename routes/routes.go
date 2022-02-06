@@ -14,11 +14,13 @@ import (
 //This function contains all URL routes of API and the html methods.
 func HandleRequest() {
 	r := mux.NewRouter()
+	r.Use(middleware.ContentTypeMiddleware)
 	r.HandleFunc("/login", controller.Login).Methods("Post")
+	r.HandleFunc("/register", controller.Register).Methods("Post")
 	//Quando implementar o front, editar o Middleware
 
 	subRouter := r.PathPrefix("/api/").Subrouter()
-	subRouter.Use(middleware.ContentTypeMiddleware)
+	subRouter.Use(middleware.ContentTypeMiddleware, middleware.AuthorizationMiddleware)
 	// r.HandleFunc("/", controller.Home)
 	// r.HandleFunc("/api/dashboard", controller.Dashboard).Methods("Get")
 	subRouter.HandleFunc("/resumo/{year}/{month}", controller.BalanceByMonth).Methods("Get")

@@ -7,11 +7,10 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("secret_key")
+var jwtKey = []byte("secret_key") //GET ENV "string"
 
-func ContentTypeMiddleware(next http.Handler) http.Handler {
+func AuthorizationMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-type", "application/json")
 		cookie, err := r.Cookie("token")
 		if err != nil {
 			if err == http.ErrNoCookie {
@@ -24,7 +23,7 @@ func ContentTypeMiddleware(next http.Handler) http.Handler {
 
 		tokenStr := cookie.Value
 
-		claims := &controller.Claims{}
+		claims := &controller.Users_Claims{}
 
 		tkn, err := jwt.ParseWithClaims(tokenStr, claims,
 			func(t *jwt.Token) (interface{}, error) {
@@ -44,6 +43,13 @@ func ContentTypeMiddleware(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func ContentTypeMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-type", "application/json")
 		next.ServeHTTP(w, r)
 	})
 }

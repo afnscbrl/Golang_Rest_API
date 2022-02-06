@@ -35,7 +35,7 @@ create table outcomes (
 
 create table users (
     id serial primary key,
-    username varchar(255) NOT NULL check (username != ''),
+    username varchar(255) UNIQUE NOT NULL check (username != ''),
     passwordHash varchar(255) NOT NULL check (passwordHash != ''),
     isDisable boolean
 );

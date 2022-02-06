@@ -33,6 +33,13 @@ create table outcomes (
     constraint duplicate_outcome unique (describe, month)
 );
 
+create table users (
+    id serial primary key,
+    username varchar(255) NOT NULL check (username != ''),
+    passwordHash varchar(255) NOT NULL check (passwordHash != ''),
+    isDisable boolean
+);
+
 insert into outcomes_cat (id, category) values 
 	(1, 'Alimentação'),
 	(2, 'Saúde'),

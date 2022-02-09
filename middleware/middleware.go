@@ -2,12 +2,13 @@ package middleware
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/afnscbrl/Golang_Rest_API/controller"
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("secret_key") //GET ENV "string"
+var jwtKey = []byte(os.Getenv("SECRET_KEY"))
 
 func AuthorizationMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

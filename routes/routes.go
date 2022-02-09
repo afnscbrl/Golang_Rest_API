@@ -15,6 +15,7 @@ import (
 func HandleRequest() {
 	r := mux.NewRouter()
 	r.Use(middleware.ContentTypeMiddleware)
+	r.HandleFunc("/", controller.Login).Methods("Post")
 	r.HandleFunc("/login", controller.Login).Methods("Post")
 	r.HandleFunc("/register", controller.Register).Methods("Post")
 	//Quando implementar o front, editar o Middleware

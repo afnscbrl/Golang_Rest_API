@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/afnscbrl/Golang_Rest_API/database"
@@ -13,7 +14,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("secret_key") //GET ENV "string"
+var jwtKey = []byte(os.Getenv("SECRET_KEY"))
 
 type Users_Claims struct {
 	Username string `json:"username"`

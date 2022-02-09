@@ -17,10 +17,10 @@ services:
   postgres:
     image: "postgres"
     environment:
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASS}
-      - POSTGRES_DB=${DATABASE_DB}
-      - DATABASE_HOST=${DATABASE_HOST}
+      - POSTGRES_URL=${DATABASE_URL}
+      # - POSTGRES_PASSWORD=${DATABASE_PASS}
+      # - POSTGRES_DB=${DATABASE_DB}
+      # - DATABASE_HOST=${DATABASE_HOST}
     build: ./database/migration
     ports:
       - "5432:5432"

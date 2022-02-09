@@ -2,12 +2,17 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/afnscbrl/Golang_Rest_API/database"
 	"github.com/afnscbrl/Golang_Rest_API/models"
 	"github.com/gorilla/mux"
 )
+
+func Home(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello")
+}
 
 func BalanceByMonth(w http.ResponseWriter, r *http.Request) {
 	var (

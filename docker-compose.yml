@@ -1,19 +1,6 @@
 version: '3'
 
 services:
-  # api:
-  #   container_name: gowallet
-  #   build:
-  #     context: .
-  #     dockerfile: DockerFile
-  #   ports: 
-  #     - 8000:8000
-  #   environment:
-  #     - PORT: 8000
-  #     - DATABASE_URL: postgres 
-  #   depends_on:
-      # - postgres
-  
   postgres:
     image: "postgres"
     environment:

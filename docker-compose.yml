@@ -21,13 +21,14 @@ services:
       # - POSTGRES_PASSWORD=${DATABASE_PASS}
       # - POSTGRES_DB=${DATABASE_DB}
       # - DATABASE_HOST=${DATABASE_HOST}
-    build: ./database/migration
+    # build: ./database/migration
     ports:
       - "5432:5432"
 
     volumes:
       - ./database/migration/docker-db.sql:/docker-entrypoint-initdb.d/docker-db.sql
-      - postgresdb:/var/lib/postgresql/data
+      - postgresdb:./database/migration
+    entrypoint: "heroku pg:psql postgresql-globular-60369 --app gowalletx -f /app/database/migration/docker-db.sql"
   # pgadmin-compose:
   #   image: dpage/pgadmin4
   #   environment:
@@ -37,5 +38,6 @@ services:
   #     - "54321:80"
   #   depends_on:
   #     - postgres
+
 volumes:
   postgresdb:
